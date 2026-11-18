@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#f6efe5"><meta name="description" content="Discover Aamour’s Rarefind jewellery and bespoke pieces from our karigar atelier."><title>Aamour — Jewellery with a story</title><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="assets/lotus.png"><link rel="stylesheet" href="style.css"><script src="app.js" defer></script><script src="editorial.js" defer></script></head>
+<body>
+<div class="announcement"><a href="index.html#kai">Discover Las Vegas KAI <span aria-hidden="true">↗</span></a></div>
+<header><a class="brand" href="index.html" aria-label="Aamour home"><img src="assets/lotus.png" alt=""><span>AAMOUR</span></a><nav aria-label="Collections"><a href="#shop" data-group="Her">For Her</a><a href="#shop" data-group="Him">For Him</a><a class="kids-link" href="kids.html">Little Aamour</a><a href="#shop" data-group="Rarefind">Rarefind</a><a href="index.html#atelier">Bespoke</a></nav><div class="tools"><button data-panel="search" aria-label="Search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="5.8"/><path d="m15 15 4.5 4.5"/></svg></button><button data-panel="saved" aria-label="Wishlist"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20.8 8.4c0 4.2-8.8 9-8.8 9s-8.8-4.8-8.8-9a4.4 4.4 0 0 1 8.8 0 4.4 4.4 0 0 1 8.8 0Z"/></svg></button><button class="bag" data-panel="bag">Bag <span id="count">0</span></button></div></header>
+<main>
+<section class="opening">
+  <div class="opening-copy"><p class="eyebrow">FINE JEWELLERY · THE RAREFIND COLLECTION</p><h1>Jewellery that<br><em>feels like you.</em></h1><p>Distinctive stones, sculptural forms and pieces made personal by our karigars.</p><a class="button dark" href="#shop" data-group="Rarefind">Explore Rarefind <span aria-hidden="true">↗</span></a></div>
+  <div class="gallery" aria-label="Aamour campaign">
+    <div class="gallery-frame"><img id="campaign-image" src="assets/refraction.webp" alt="A sculptural ring on champagne satin" fetchpriority="high"><div class="gallery-caption"><span id="campaign-name">The Rarefind Collection</span><a id="campaign-link" href="#shop" data-group="Rarefind" aria-label="Shop the featured collection">↗</a></div></div>
+    <div class="gallery-tools"><div id="campaign-pages" aria-label="Choose campaign"></div><div><button id="campaign-prev" aria-label="Previous campaign">←</button><button id="campaign-next" aria-label="Next campaign">→</button></div></div>
+  </div>
+</section>
+<section class="section featured" aria-labelledby="featured-title">
+<div class="section-head"><h2 id="featured-title">The Aamour edit</h2><a class="under" href="#shop" data-group="All">Shop all jewellery ↗</a></div>
+<div class="products" id="featured-products"></div></section>
+<section class="section category-section" aria-labelledby="categories-title"><h2 id="categories-title">Shop by category</h2><div class="category-rail" id="category-rail"></div></section>
+<section class="section shop" id="shop">
+<div class="section-head"><h2 id="shop-title">Shop jewellery</h2><button class="under" data-panel="rates">Demo metal rates ↗</button></div>
+<div id="groups" aria-label="Shop collections"></div>
+<div class="catalog-toolbar"><span id="product-count" role="status"></span><div><label>Sort by <select id="sort"><option value="featured">Featured</option><option value="low">Price: low to high</option><option value="high">Price: high to low</option><option value="name">Name: A to Z</option></select></label><div id="density" aria-label="Grid columns"><button aria-pressed="false" data-columns="3">3</button><button aria-pressed="true" data-columns="4">4</button></div></div></div>
+<div class="catalog-layout">
+<details class="filter-box" id="filter-box" open><summary>Filters</summary>
+<div class="filter-fields">
+<label for="category">Category</label><select id="category"><option>All</option><option>Rings</option><option>Earrings</option><option>Necklaces</option><option>Bracelets</option><option>Anklets</option></select>
+<label for="metal">Metal</label><select id="metal"><option>All</option><option>Gold</option><option>Silver</option></select>
+<label for="max-price">Maximum price <output id="price-limit" for="max-price"></output></label><input id="max-price" type="range" min="0" step="1" value="100">
+<button class="under" id="reset-filters">Clear filters</button>
+</div></details>
+<div class="products" id="products"></div></div></section>
+<section class="kai reveal" id="kai"><img src="assets/kai.webp" loading="lazy" alt="Gold-framed dendritic agate pendant on dark stone"><div><div class="eyebrow">EXCLUSIVE LIMITED COLLECTION</div><h2>Las Vegas <em>KAI</em></h2><p>Dendritic agate holds branching forms that look like tiny landscapes. Krishna Soni and Jyoti Kaushal bring these rare stones into focus in a collection of fine jewellery.</p><a class="button light" href="#shop" data-group="KAI">Explore KAI <span aria-hidden="true">↗</span></a></div></section>
+<section class="section atelier" id="atelier"><div class="eyebrow">THE AAMOUR ATELIER</div><h2>Made for your story.</h2><p>Bring a sketch, a stone or an idea. Work with our karigars to shape it into a piece you can keep close.</p><button class="button dark" data-panel="bespoke">Start a custom design ↗</button><button class="button light" data-panel="stylist">Find my jewellery ↗</button></section></main>
+<footer><a class="brand" href="index.html"><img src="assets/lotus.png" alt=""><span>AAMOUR</span></a><div><a href="index.html#shop">Shop</a><a href="kids.html">Little Aamour</a><a href="index.html#kai">Las Vegas KAI</a><a href="index.html#atelier">Atelier</a><button id="install">Install app</button></div><small>© 2026 Aamour Jewellery</small></footer>
+<nav class="mobile-nav" aria-label="Mobile navigation"><a href="index.html">Home</a><a href="#shop">Shop</a><a href="kids.html">Kids</a><button data-panel="saved">Saved</button><button data-panel="bag">Bag</button></nav>
+<dialog id="modal" aria-label="Aamour shopping panel"><div class="modal-top"><button id="close" aria-label="Close dialog">×</button></div><div id="panel"></div></dialog><div id="toast" role="status"></div>
+</body></html>
