@@ -56,7 +56,10 @@ function card(p, lifestyle = false) {
     '<button class="round-control quick-bag" data-action="add" data-id="'+p.id+'" aria-label="Add '+p.name+' to bag">'+glyphs.bag+'</button></div><h3><a href="'+pieceLink(p)+'">'+p.name+'</a></h3><p>'+money.format(price(p))+'</p></article>';
 }
 function render() {
-  $('count').textContent = Object.values(bag).reduce((sum,n) => sum+n,0);
+  const bagCount = Object.values(bag).reduce((sum,n) => sum+n,0);
+  $('count').textContent = bagCount;
+  $('mobile-count').textContent = bagCount;
+  $('mobile-count').parentElement.setAttribute('aria-label','Open your bag, '+bagCount+' items');
   if ($('featured-products')) $('featured-products').innerHTML = featuredIds.map(id => card(find(id), id==='star')).join('');
   if (!$('products')) return;
   $('groups').innerHTML = groups.map((g) => (g==='Kids' ? '<a class="pill" href="kids.html">Kids</a>' : '<button class="pill" data-group="'+g+'" aria-pressed="'+(group===g)+'">'+g+'</button>')).join('');
@@ -89,7 +92,7 @@ function renderPiece() {
     return;
   }
   document.title = p.name+' — Aamour';
-  $('piece').innerHTML = '<a class="under piece-back" href="'+back+'">← Back to jewellery</a><div class="piece-layout"><div class="piece-image"><img src="assets/pack-'+p.id+'.webp" alt="'+p.name+'"><button class="round-control" data-action="zoom" data-id="'+p.id+'" aria-label="Enlarge product photograph">⤢</button></div><div class="piece-info"><div class="eyebrow">'+p.category+' · '+p.metal+'</div><h1>'+p.name+'</h1><p class="piece-price">'+money.format(price(p))+'</p><p>'+p.story+'</p><label class="qty-label" for="piece-quantity">Quantity</label><div class="quantity"><button data-step="-1" aria-label="Decrease quantity">−</button><input id="piece-quantity" type="number" min="1" max="99" value="1"><button data-step="1" aria-label="Increase quantity">+</button></div><div class="piece-actions">'+action('Add to bag','add',p.id)+action('Preview on you','try',p.id,'light')+'</div><details open><summary>Piece details</summary><p>'+p.metal+' · '+p.weight+' g sample metal weight</p></details></div></div>';
+  $('piece').innerHTML = '<a class="under piece-back" href="'+back+'">← Back to jewellery</a><div class="piece-layout"><div class="piece-image"><img src="assets/pack-'+p.id+'.webp" alt="'+p.name+'"><button class="round-control" data-action="zoom" data-id="'+p.id+'" aria-label="Enlarge product photograph">⤢</button></div><div class="piece-info"><div class="eyebrow"><span class="metal-dot" data-metal="'+p.metal+'"></span>'+p.category+' · '+p.metal+'</div><div class="piece-title"><h1>'+p.name+'</h1><button class="round-control piece-save" data-action="save" data-id="'+p.id+'" aria-label="Save '+p.name+'" aria-pressed="'+saved.has(p.id)+'">'+(saved.has(p.id)?'♥':'♡')+'</button></div><p class="piece-price">'+money.format(price(p))+'</p><p>'+p.story+'</p><label class="qty-label" for="piece-quantity">Quantity</label><div class="quantity"><button data-step="-1" aria-label="Decrease quantity">−</button><input id="piece-quantity" type="number" min="1" max="99" value="1"><button data-step="1" aria-label="Increase quantity">+</button></div><div class="piece-actions">'+action('Add to bag','add',p.id)+action('Preview on you','try',p.id,'light')+'</div><details open><summary>Piece details</summary><p>'+p.metal+' · '+p.weight+' g sample metal weight</p></details></div></div>';
 }
 function readQuantity() {
   return Math.min(99, Math.max(1, Math.trunc(Number($('piece-quantity')?.value)) || 1));
@@ -180,6 +183,7 @@ document.addEventListener('click', (event) => {
     render();
   }
   if (panel) {
+    if (control.closest('.mobile-menu')) control.closest('.mobile-menu').open = false;
     show(panel);
     if (panel==='bespoke') {
       const brief = load('brief', {});
@@ -193,6 +197,10 @@ document.addEventListener('click', (event) => {
   if (type==='save') {
     if (saved.has(id)) saved.delete(id); else saved.add(id);
     save('saved',[...saved]);
+    if (control.classList.contains('piece-save')) {
+      control.setAttribute('aria-pressed', saved.has(id));
+      control.textContent = saved.has(id) ? '♥' : '♡';
+    }
     render();
     document.querySelector('[data-action="save"][data-id="'+id+'"]')?.focus();
     notify(saved.has(id)?'Piece saved':'Piece removed from saved');
@@ -274,6 +282,18 @@ $('piece')?.addEventListener('click', event => {
   if (step) $('piece-quantity').value = Math.min(99,Math.max(1,readQuantity()+Number(step.dataset.step)));
 });
 if ($('filter-box') && window.matchMedia('(max-width: 710px)').matches) $('filter-box').open = false;
+const mobileMenu = document.querySelector('.mobile-menu');
+mobileMenu?.addEventListener('click', event => {
+  if (event.target.closest('a')) mobileMenu.open = false;
+});
+document.addEventListener('click', event => {
+  if (mobileMenu?.open && !mobileMenu.contains(event.target)) mobileMenu.open = false;
+});
+document.addEventListener('keydown', event => {
+  if (event.key !== 'Escape' || !mobileMenu?.open) return;
+  mobileMenu.open = false;
+  mobileMenu.querySelector('summary').focus();
+});
 renderPiece();
 $('close').onclick = () => $('modal').close();
 $('modal').addEventListener('close',releaseMedia);

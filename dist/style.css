@@ -217,3 +217,55 @@ body:not(.little) #campaign-pages button[aria-pressed=true]::before,body:not(.li
  .little .little-card .heart{top:7px;right:7px}
  .little-gift{grid-template-columns:1fr}.gift-art{min-height:145px}
 }
+
+/* Mobile storefront */
+.mobile-menu,.mobile-bag,.piece-save{display:none}
+@media(max-width:710px){
+ body:not(.little){--paper:#fffaf3;--ink:#2a211a}
+ header{gap:0;padding:0 0 0 6%;height:62px}
+ header .tools{display:none}
+ .mobile-menu{display:block;align-self:stretch}
+ .mobile-menu summary{display:grid;place-items:center;list-style:none;width:64px;height:100%;cursor:pointer;background:#33261c0a}
+ .mobile-menu summary::-webkit-details-marker{display:none}
+ .mobile-menu summary span{width:23px;height:13px;position:relative;border-top:2px solid currentColor}
+ .mobile-menu summary span::before,.mobile-menu summary span::after{content:"";position:absolute;right:0;top:4px;width:18px;border-top:2px solid currentColor}
+ .mobile-menu summary span::after{top:10px;width:12px}
+ header .mobile-menu nav{position:absolute;top:100%;left:0;right:0;display:grid;grid-template-columns:1fr 1fr;gap:0;background:var(--paper);border-bottom:1px solid var(--line);padding:10px 6% 19px;box-shadow:0 12px 26px #30221921}
+ header .mobile-menu nav :is(a,button){text-align:left;padding:12px 0;font-size:14px;font-weight:600;min-height:44px}
+ header .mobile-menu nav a::after{display:none}
+ .mobile-bag{position:fixed;z-index:3;bottom:max(18px,calc(env(safe-area-inset-bottom) + 10px));right:17px;display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#33261e;color:#fff8ec;box-shadow:0 8px 18px #38261936}
+ .mobile-bag svg{width:22px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linejoin:round}
+ .mobile-bag span{position:absolute;top:-4px;right:-3px;background:#e8ceab;color:#322316;border-radius:20px;min-width:19px;padding:2px 4px;font-size:11px;font-weight:700}
+ .little .mobile-bag{background:#553b68}.little .mobile-bag span{background:#f3ddf1}
+ footer{margin-bottom:0;padding-bottom:80px}
+ body:not(.little) .shop .catalog-layout .products{grid-template-columns:minmax(0,1fr);gap:26px}
+ body:not(.little) .shop .product{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto 47px;align-items:center;column-gap:12px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+ body:not(.little) .shop .product-visual{display:contents}
+ body:not(.little) .shop .product-photo{grid-column:1/-1;background:transparent;border-radius:0}
+ body:not(.little) .shop .product-photo img{aspect-ratio:1.16;object-fit:contain;mix-blend-mode:multiply;background:transparent;border-radius:0}
+ body:not(.little) .shop .product h3{grid-column:1;font:500 20px/1.18 var(--serif);margin:6px 0}
+ body:not(.little) .shop .product p{grid-column:2;font-weight:700;margin:0}
+ body:not(.little) .shop .product .quick-bag{position:static;grid-column:3;grid-row:2;width:44px;height:44px;background:#37291f;color:#fff8ed;border-radius:12px}
+ body:not(.little) .shop .product .quick-bag svg{display:none}
+ body:not(.little) .shop .product .quick-bag::after{content:"+";font-size:25px}
+ body:not(.little) .shop .product .card-tools{top:8px;right:4px}
+ .piece-page{padding-top:22px;padding-inline:6%}
+ .piece-back{font-size:12px;margin-bottom:12px}
+ .piece-layout{gap:18px}
+ body .piece-image{background:transparent;border-radius:0}
+ .piece-image img{aspect-ratio:1.03;object-fit:contain;mix-blend-mode:multiply}
+ .piece-info{display:flex;flex-direction:column;align-items:flex-start}
+ .piece-info .eyebrow{margin:0 0 12px}
+ .metal-dot{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:4px;background:#ddbd83}
+ .metal-dot[data-metal="Silver"]{background:#c6c8cb}
+ .piece-title{display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px}
+ .piece-title h1{font:500 clamp(34px,9vw,49px)/1.06 var(--serif);letter-spacing:-.046em}
+ .piece-title .piece-save{display:grid;flex:0 0 40px;width:40px;height:40px}
+ .piece-info>p:not(.piece-price){order:1;margin:12px 0 0}
+ .piece-price{order:2;font:600 32px/1.1 var(--serif);margin:17px 0 0}
+ .piece-info .qty-label,.piece-info .quantity{order:3}
+ .piece-actions{order:4;width:100%;display:grid;grid-template-columns:1fr;margin:19px 0 17px}
+ .piece-actions .dark{min-height:52px;border-radius:12px;font:500 17px var(--serif)}
+ .piece-info details{order:5;width:100%}
+}
+@media(max-width:710px){header .mobile-menu:not([open]) nav{display:none}}
