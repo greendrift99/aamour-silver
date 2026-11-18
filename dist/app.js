@@ -48,8 +48,16 @@ const glyphs = {
 };
 function card(p, lifestyle = false) {
   if (kidsStore) {
-    const theme = {star:'peach',anklet:'lilac',stud:'mint'}[p.id];
-    return '<article class="product little-card little-'+theme+'"><a class="product-photo" href="'+pieceLink(p)+'" aria-label="View '+p.name+'">'+packshot(p)+'</a><div class="little-card-copy"><span class="little-card-kind">'+p.category+'</span><h3><a href="'+pieceLink(p)+'">'+p.name+'</a></h3><p>'+money.format(price(p))+'</p><button class="little-card-view" data-action="product" data-id="'+p.id+'">Quick view ↗</button></div><button class="round-control heart" data-action="save" data-id="'+p.id+'" aria-label="Save '+p.name+'" aria-pressed="'+saved.has(p.id)+'">'+(saved.has(p.id)?'♥':'♡')+'</button></article>';
+    const {theme,mark} = {
+      star:{theme:'peach',mark:'✦'},
+      anklet:{theme:'lilac',mark:'☾'},
+      stud:{theme:'mint',mark:'☀'}
+    }[p.id];
+    const link = pieceLink(p);
+    return '<article class="product little-card little-'+theme+'">'+
+      '<div class="little-card-top"><span class="little-card-kind">'+p.category+'</span><button class="round-control heart" data-action="save" data-id="'+p.id+'" aria-label="Save '+p.name+'" aria-pressed="'+saved.has(p.id)+'">'+(saved.has(p.id)?'♥':'♡')+'</button></div>'+
+      '<div class="little-card-stage"><span class="little-card-mark" aria-hidden="true">'+mark+'</span><a class="product-photo" href="'+link+'" aria-label="View '+p.name+'"><img src="assets/little-'+p.id+'.webp" alt="'+p.name+'" loading="lazy"></a></div>'+
+      '<div class="little-card-copy"><div><h3><a href="'+link+'">'+p.name+'</a></h3><p>'+money.format(price(p))+'</p></div><button class="little-card-view" data-action="product" data-id="'+p.id+'" aria-label="Quick view '+p.name+'">↗</button></div></article>';
   }
   return '<article class="product"><div class="product-visual"><a class="product-photo" href="'+pieceLink(p)+'" aria-label="View '+p.name+'">'+(lifestyle ? '<img src="assets/kids.webp" alt="Little Star Bracelet on silk" loading="lazy">' : packshot(p))+'</a>'+
     '<div class="card-tools"><button class="round-control quick-view" data-action="product" data-id="'+p.id+'" aria-label="Quick view '+p.name+'">'+glyphs.eye+'</button><button class="round-control heart" data-action="save" data-id="'+p.id+'" aria-label="Save '+p.name+'" aria-pressed="'+saved.has(p.id)+'">'+(saved.has(p.id)?'♥':'♡')+'</button></div>'+

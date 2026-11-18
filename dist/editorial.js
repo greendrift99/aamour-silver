@@ -47,6 +47,12 @@ kidFilters?.addEventListener('click', event => {
   category.value = control.dataset.kid;
   category.dispatchEvent(new Event('change'));
   [...kidFilters.children].forEach(button => button.setAttribute('aria-pressed', button === control));
+  if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.querySelectorAll('.little-card').forEach((card,index) => card.animate?.(
+      [{opacity:0,transform:'translateY(13px) scale(.98)'},{opacity:1,transform:'translateY(0) scale(1)'}],
+      {duration:360,delay:index*55,easing:'cubic-bezier(.2,.7,.25,1)',fill:'backwards'}
+    ));
+  }
 });
 if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
   const observer = new IntersectionObserver(entries => {

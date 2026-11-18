@@ -316,3 +316,37 @@ body:not(.little) .gallery-tools button,body:not(.little) .product-photo{transit
  body:not(.little) .piece-image{background:transparent}
 }
 @media(prefers-reduced-motion:reduce){.world-art>img,.world-orbit{transform:none;transition:none}.world-orbit span{animation:none}}
+
+/* Little Aamour catalogue */
+.little .shop .products{grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:auto;gap:clamp(9px,1.7vw,24px)}
+.little .shop .little-card,.little .shop .little-card:first-child:not(:only-child){
+ --card:#eee4fa;--accent:#725994;grid-row:auto;grid-column:auto;grid-template-columns:minmax(0,1fr);grid-template-rows:auto 1fr auto;
+ align-items:stretch;padding:clamp(10px,1.5vw,22px);border-radius:30px;
+ background:radial-gradient(circle at 13% 0%,#fff9,transparent 52%),var(--card)
+}
+.little .shop .little-peach{--card:#fbe7dc;--accent:#a75e54}
+.little .shop .little-mint{--card:#e1f2e7;--accent:#487b5e}
+.little-card-top,.little .little-card-copy{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.little .little-card .heart{position:static;flex:none}
+.little-card-kind{background:#fff9;border-radius:20px;padding:5px 9px;color:#4d3957}
+.little-card-stage{position:relative;isolation:isolate;margin:12px 0}
+.little .little-card .product-photo{width:100%;aspect-ratio:1.08;height:auto;background:#fff;border-radius:49% 48% 38% 42%;transition:border-radius .36s ease}
+.little .little-mint .product-photo{border-radius:34% 49% 45% 32%}
+.little .little-lilac .product-photo{border-radius:42% 34% 38% 49%}
+.little .little-card .product-photo img{width:100%;height:100%;aspect-ratio:auto;max-height:none;padding:8%;object-fit:contain;mix-blend-mode:normal}
+.little-card-mark{position:absolute;top:-7px;right:4px;z-index:1;pointer-events:none;color:var(--accent);font-size:clamp(26px,4vw,50px);line-height:1;transform:rotate(12deg);transition:transform .36s cubic-bezier(.18,.8,.35,1.35)}
+.little .little-card:focus-within .little-card-mark{transform:rotate(-10deg) scale(1.16)}
+.little .little-card-copy{padding:3px 0 0;align-items:end}
+.little .little-card h3{font-size:clamp(18px,2.2vw,32px)}
+.little .little-card p{margin-top:4px}
+.little .little-card-view{width:42px;height:42px;flex:0 0 42px;margin:0;display:grid;place-items:center;font-size:18px}
+@media(hover:hover) and (prefers-reduced-motion:no-preference){
+ .little .little-card:hover .little-card-mark{transform:translate(-5px,-4px) rotate(-13deg) scale(1.2)}
+ .little .little-card:hover .product-photo{border-radius:38% 41% 45% 48%}
+}
+@media(max-width:710px){
+ .little .shop .products{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .little .shop .little-card,.little .shop .little-card:first-child:not(:only-child){border-radius:20px}
+ .little .little-card-view{width:34px;height:34px;flex-basis:34px}
+}
+@media(max-width:345px){.little .shop .products{grid-template-columns:1fr}}
