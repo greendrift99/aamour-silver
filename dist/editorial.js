@@ -142,3 +142,55 @@ if (world) {
     next.click();
   });
 }
+
+const quest = document.getElementById('space-quest');
+if (quest) {
+  const tokens = [...quest.querySelectorAll('[data-token]')];
+  const trails = [...quest.querySelectorAll('[data-trail]')];
+  const progress = document.getElementById('quest-progress');
+  const reset = document.getElementById('quest-reset');
+  function updateQuest() {
+    const collected = tokens.map(token => token.getAttribute('aria-pressed')==='true');
+    const count = collected.filter(Boolean).length;
+    trails.forEach((trail,index) => trail.classList.toggle('lit',collected[index] && collected[(index+1)%tokens.length]));
+    quest.classList.toggle('quest-complete',count===tokens.length);
+    progress.textContent = count===tokens.length ? 'Constellation complete!' : count+' of '+tokens.length+' collected';
+    reset.hidden = count===0;
+  }
+  tokens.forEach(token => token.addEventListener('click',() => {
+    token.setAttribute('aria-pressed','true');
+    updateQuest();
+  }));
+  reset.addEventListener('click',() => {
+    tokens.forEach(token => token.setAttribute('aria-pressed','false'));
+    tokens[0].focus();
+    updateQuest();
+  });
+
+  const wornDescriptions = {
+    star:'Styled photo of a child wearing the star bracelet',
+    anklet:'Styled photo of a child wearing the moon and star anklet',
+    stud:'Styled photo of a child wearing a sunburst stud'
+  };
+  const gallery = document.getElementById('products');
+  gallery.addEventListener('click',event => {
+    const button = event.target.closest('[data-view]');
+    if (!button || button.getAttribute('aria-pressed')==='true') return;
+    const controls = button.closest('.little-views');
+    const card = controls.closest('.little-card');
+    const image = card.querySelector('.product-photo img');
+    const id = controls.dataset.photoId;
+    const view = button.dataset.view;
+    const name = card.querySelector('h3').textContent;
+    const url = 'assets/little-'+id+(view==='front' ? '' : '-'+view)+'.webp';
+    image.src = url;
+    image.alt = view==='worn' ? wornDescriptions[id] : name+(view==='detail' ? ' shown at an angle' : ', front view');
+    card.dataset.photoView = view;
+    [...controls.children].forEach(control => control.setAttribute('aria-pressed',control===button));
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      image.getAnimations?.().forEach(animation => animation.cancel());
+      image.animate?.([{opacity:.2,transform:'translateX(12px) scale(.97)'},{opacity:1,transform:'translateX(0) scale(1)'}],
+        {duration:380,easing:'cubic-bezier(.2,.8,.2,1)'});
+    }
+  });
+}
