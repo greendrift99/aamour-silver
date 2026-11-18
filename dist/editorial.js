@@ -1,6 +1,6 @@
 const campaigns = [
+  {image:'aamour-house',alt:'Gold sculptural hoops worn with an ivory blouse',name:'The Aamour Edit',href:'#shop',group:'Her'},
   {image:'refraction',alt:'A sculptural ring on champagne satin',name:'The Rarefind Collection',href:'#shop',group:'Rarefind'},
-  {image:'hero',alt:'Gold jewellery worn in profile',name:'The Aamour Edit',href:'#shop',group:'Her'},
   {image:'kai',alt:'Gold-framed dendritic agate pendant',name:'Las Vegas KAI',href:'#kai'}
 ];
 const campaign = document.querySelector('.gallery');

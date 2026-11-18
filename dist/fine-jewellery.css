@@ -68,3 +68,59 @@
 .commerce-alert{color:#6f471c;background:#faf0df;border-radius:5px;padding:8px 10px}
 .mini-bag-actions{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:710px){.commerce-grid{grid-template-columns:1fr}.cart-item{grid-template-columns:65px minmax(0,1fr) auto;gap:9px}.cart-item>strong{font-size:13px}}
+
+/* Aamour house storefront */
+.fine-jewellery:not(.little){--paper:#fffdfa;--ink:#2c2421;--line:#e8dfd5;--muted:#64554b;--gold:#ad8152;--gold-ink:#77512f;--cream:#f6eee4}
+.fine-jewellery:not(.little) .house-announcement{display:grid;grid-template-columns:1fr auto 1fr;gap:12px;padding:9px 5%;background:#41262c;color:#fff6ed;text-align:center}
+.fine-jewellery:not(.little) .house-announcement>span{justify-self:start;color:inherit}
+.fine-jewellery:not(.little) .house-announcement>a:last-child{justify-self:end}
+.fine-jewellery:not(.little) .house-announcement a span{color:#f6d5a9}
+.fine-jewellery:not(.little) .house-header{height:auto;min-height:84px;display:grid;grid-template-columns:1fr auto 1fr;grid-template-rows:61px auto;gap:0;padding:0 5%;background:#fffdfa}
+.fine-jewellery:not(.little) .house-header>.brand{grid-column:2;grid-row:1;justify-self:center;letter-spacing:.20em}
+.fine-jewellery:not(.little) .house-header>.brand small{display:block;text-align:center;font:700 8px/1.4 Lato,sans-serif;letter-spacing:.28em}
+.fine-jewellery:not(.little) .house-header>.tools{grid-column:3;grid-row:1;justify-self:end}
+.fine-jewellery:not(.little) .house-header>nav{grid-column:1/-1;grid-row:2;justify-content:center;padding:10px 0 13px;border-top:1px solid var(--line)}
+.fine-jewellery:not(.little) .house-campaign{position:relative;display:block;padding:0;background:#ead9c8;min-height:0}
+.fine-jewellery:not(.little) .house-campaign .gallery-frame{height:clamp(435px,43vw,650px);border:0;border-radius:0;padding:0;box-shadow:none}
+.fine-jewellery:not(.little) .house-campaign .gallery-frame img{border-radius:0;object-position:center 46%}
+.fine-jewellery:not(.little) .house-campaign .gallery-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#fff3e8 0%,#fff3e8e8 27%,#fff3e800 65%);pointer-events:none}
+.fine-jewellery:not(.little) .house-campaign .opening-copy{position:absolute;z-index:1;left:max(6%,calc((100vw - 1400px)/2));top:46%;transform:translateY(-50%);width:min(43%,530px);animation:none}
+.fine-jewellery:not(.little) .house-campaign h1{font-size:clamp(56px,7.6vw,116px);line-height:.9}
+.fine-jewellery:not(.little) .house-campaign h1 em{color:#6a3c43}
+.fine-jewellery:not(.little) .house-campaign .gallery-caption{z-index:1;left:auto;right:5%}
+.fine-jewellery:not(.little) .house-campaign .gallery-tools{padding:10px 5%;background:#fff9f2}
+.house-actions{display:flex;align-items:center;gap:15px;flex-wrap:wrap}
+.fine-jewellery:not(.little) .button.dark,.fine-jewellery:not(.little) .mobile-bag{background:#4b2a32;border-color:#4b2a32}
+.fine-jewellery:not(.little) .button.dark:hover{background:#613b43;border-color:#613b43}
+.fine-jewellery:not(.little) .category-section{text-align:left;background:#fbf6ef}
+.fine-jewellery:not(.little) .category-rail{max-width:none;gap:clamp(8px,2vw,24px)}
+.fine-jewellery:not(.little) .category-rail a{gap:8px;font-size:14px}
+.fine-jewellery:not(.little) .category-rail img{border-radius:10px;max-width:none;outline:none}
+.house-edits{display:grid;grid-template-columns:1fr 1fr;gap:16px;padding-top:0}
+.house-edits a{position:relative;overflow:hidden;min-height:200px;isolation:isolate;background:#e6d4bf}
+.house-edits img{height:100%;aspect-ratio:2/1;transition:transform .45s}
+.house-edits a:hover img{transform:scale(1.035)}
+.house-edits a div{position:absolute;inset:auto 0 0;padding:40px 18px 16px;color:white;background:linear-gradient(transparent,#261511d9)}
+.house-edits a h2{font-size:clamp(22px,3vw,43px)}
+.house-edits a span{display:block;font-size:12px;margin-top:4px}
+.fine-jewellery:not(.little) .house-footer{display:grid;grid-template-columns:1.45fr 1fr 1fr 1fr;align-items:start;gap:30px;background:#39242a;color:#fdf1e7}
+.fine-jewellery:not(.little) .house-footer>div{display:grid;justify-items:start;gap:9px}
+.fine-jewellery:not(.little) .house-footer h2{font-size:19px;margin-bottom:5px}
+.fine-jewellery:not(.little) .house-footer button{padding:0;text-align:left}
+.fine-jewellery:not(.little) .house-footer small{grid-column:1/-1;border-top:1px solid #ffffff38;padding-top:18px}
+.fine-jewellery:not(.little) .footer-identity p{margin:0}
+@media(max-width:710px){
+ .fine-jewellery:not(.little) .house-announcement{display:block}.fine-jewellery:not(.little) .house-announcement>span,.fine-jewellery:not(.little) .house-announcement>a:last-child{display:none}
+ .fine-jewellery:not(.little) .house-header{height:61px;min-height:0;grid-template-columns:1fr auto;grid-template-rows:1fr;padding:0 0 0 5%}
+ .fine-jewellery:not(.little) .house-header>.brand{grid-column:1;justify-self:start}
+ .fine-jewellery:not(.little) .house-header>.mobile-menu{grid-column:2;grid-row:1}
+ .fine-jewellery:not(.little) .house-campaign .opening-copy{position:relative;left:auto;top:auto;transform:none;width:auto;padding:30px 5% 22px}
+ .fine-jewellery:not(.little) .house-campaign .gallery-frame{height:clamp(255px,70vw,355px)}
+ .fine-jewellery:not(.little) .house-campaign .gallery-frame::after{display:none}
+ .fine-jewellery:not(.little) .house-campaign .gallery-frame img{object-position:65% center}
+ .fine-jewellery:not(.little) .house-campaign h1{font-size:clamp(54px,12vw,78px)}
+ .fine-jewellery:not(.little) .category-rail{gap:10px}
+ .house-edits{gap:8px}.house-edits a{min-height:165px}.house-edits a div{padding:25px 8px 9px}
+ .fine-jewellery:not(.little) .house-footer{grid-template-columns:1fr 1fr;gap:22px}.fine-jewellery:not(.little) .house-footer .footer-identity{grid-column:1/-1}
+}
+@media(min-width:711px){.house-home :is(#shop,#kai,#atelier){scroll-margin-top:22px}}
