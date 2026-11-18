@@ -381,3 +381,24 @@ body:not(.little) .gallery-tools button,body:not(.little) .product-photo{transit
 .cloudtown{height:clamp(155px,25vw,330px);max-width:1440px;margin:-12px auto 24px;background:url('assets/cloudtown.webp') center bottom/cover no-repeat;mask-image:linear-gradient(transparent 1%,#000 34%,#000 89%,transparent);pointer-events:none}
 @media(max-width:710px){.cloudtown{margin:0 -4.35% 15px;background-size:auto 260%;height:155px}.world-start .under{font-size:12px}}
 #cms-notices{padding:.75rem 1rem;text-align:center;background:#f6efe5}#cms-notices p{margin:.25rem 0}#cms-notices a{text-decoration:underline}
+
+/* Little Aamour entrance */
+.little-welcome{display:none}
+@media(prefers-reduced-motion:no-preference){
+ .little-arrival .little-welcome{
+   position:fixed;inset:0;z-index:4;display:grid;place-items:center;overflow:hidden;pointer-events:none;
+   background:radial-gradient(ellipse at 18% 30%,#fae4ea,transparent 49%),radial-gradient(ellipse at 86% 70%,#e1f4ed,transparent 56%),#f2eafa;
+   animation:little-welcome-reveal 1.45s cubic-bezier(.35,.06,.22,1) both
+ }
+ .little-welcome-cloud{position:absolute;inset:48% -8% -20%;background:url('assets/cloudtown.webp') center bottom/cover no-repeat;mask-image:linear-gradient(transparent 1%,#000 46%);animation:little-welcome-rise .9s ease-out both}
+ .little-welcome-note{position:relative;text-align:center;margin-top:-7vh;padding:18px 24px;color:#493455;animation:little-welcome-rise .68s cubic-bezier(.18,.76,.26,1) both}
+ .little-welcome-charm{display:flex;align-items:center;justify-content:center;gap:12px}
+ .little-welcome-charm img{width:54px;height:auto;object-fit:contain;filter:brightness(.83) saturate(1.2)}
+ .little-welcome-charm span{font-size:22px;color:#9e714b;animation:little-welcome-spark .56s .17s both}
+ .little-welcome-charm span:last-child{animation-delay:.29s}
+ .little-welcome-name{font:400 clamp(32px,8vw,59px)/1.12 var(--serif);letter-spacing:-.045em;margin-top:9px}
+ .little-welcome-note p{margin:8px 0 0;font-size:15px}
+}
+@keyframes little-welcome-rise{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes little-welcome-spark{from{opacity:0;transform:scale(.5) rotate(-20deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes little-welcome-reveal{0%,65%{opacity:1;visibility:visible}99%{opacity:0;visibility:visible}100%{opacity:0;visibility:hidden}}
