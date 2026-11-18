@@ -269,3 +269,50 @@ body:not(.little) #campaign-pages button[aria-pressed=true]::before,body:not(.li
  .piece-info details{order:5;width:100%}
 }
 @media(max-width:710px){header .mobile-menu:not([open]) nav{display:none}}
+
+/* Quiet neutral surfaces and the Little Aamour story */
+body:not(.little){--paper:#fbf9f6;--ink:#211e1b;--line:#e8e2dc;--muted:#5d5650;--gold:#80664f;background:var(--paper)}
+body:not(.little) header{background:#fffdfaef}
+body:not(.little) .announcement{background:#24211e}
+body:not(.little) .opening{background:radial-gradient(ellipse at 52% 32%,#eee3d7,transparent 66%),linear-gradient(180deg,#f8f3ed,var(--paper))}
+body:not(.little) .gallery-frame{border-color:#fffdfa;background:#ffffff94;box-shadow:0 22px 54px #372d231d}
+body:not(.little) .gallery-caption,body:not(.little) .round-control{background:#fffdfa}
+body:not(.little) .filter-box{background:#f7f3ef}
+body:not(.little) .product-visual,body:not(.little) .piece-image{background:#f4efea}
+body:not(.little) footer,body:not(.little) .piece-info details{background:#f4efea}
+body:not(.little) .gallery-tools button,body:not(.little) .product-photo{transition:background .22s,transform .22s}
+.visually-hidden{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+.little-world{padding:54px 5% 28px;overflow:hidden;background:radial-gradient(ellipse at 48% 41%,#e9f1fd 0%,transparent 65%),linear-gradient(180deg,#fdfcff,#fffaf5)}
+.world-intro{text-align:center;max-width:740px;margin:0 auto 34px}
+.world-intro .little-back{margin:0 auto 16px}
+.world-intro .little-mark{margin-bottom:13px}
+.world-intro h1{font:400 clamp(52px,8.3vw,112px)/.95 var(--serif);letter-spacing:-.075em}
+.world-intro h1 span,.world-intro h1 em{display:block;animation:world-rise .8s both}
+.world-intro h1 em{color:#77568b;animation-delay:.12s}
+.world-intro p{animation:world-rise .75s .24s both;margin:19px auto 0}
+.world-scene{max-width:1080px;margin:auto;animation:world-rise .9s .25s both}
+.world-art{isolation:isolate;position:relative;overflow:hidden;border:1px solid white;border-radius:27px;height:clamp(320px,48vw,575px);box-shadow:0 16px 50px #65527c25;background:#f6e8f0;transition:background .4s}
+.world-art>img{width:100%;height:100%;object-fit:cover;transform:translate3d(var(--world-x,0px),var(--world-y,0px),0) scale(1.06);transition:transform .22s ease-out;mix-blend-mode:multiply}
+.world-scene[data-world="stud"] .world-art{background:#e8f2e8}
+.world-scene[data-world="anklet"] .world-art{background:#eee6f8}
+.world-scene:not([data-world="star"]) .world-art>img{object-fit:contain;padding:26px}
+.world-orbit{position:absolute;inset:0;pointer-events:none;transform:translate3d(calc(-2 * var(--world-x,0px)),calc(-1.6 * var(--world-y,0px)),0);transition:transform .25s ease-out}
+.world-orbit span{position:absolute;font-size:clamp(24px,4vw,48px);color:#fff9e6;text-shadow:0 1px 7px #573c7159;animation:world-spark .9s both}
+.world-orbit span:first-child{top:12%;left:12%;animation-delay:.55s}
+.world-orbit span:nth-child(2){top:20%;right:12%;animation-delay:.64s}
+.world-orbit span:last-child{bottom:19%;right:19%;animation-delay:.78s}
+.world-piece{position:absolute;bottom:16px;left:16px;display:flex;align-items:center;gap:15px;padding:6px 7px 6px 14px;border:1px solid #fff;border-radius:30px;background:#fffcf5e8;font-size:13px;font-weight:700;box-shadow:0 3px 16px #49325922}
+.world-piece span:last-child{display:grid;place-items:center;min-width:33px;min-height:33px;border-radius:50%;background:#5c4470;color:#fff}
+.world-controls{display:flex;justify-content:center;gap:8px;margin:17px auto 0}
+.world-controls button{border:1px solid #e9dae9;border-radius:30px;padding:9px 14px;background:#fff9ff;font-size:13px;font-weight:700;transition:transform .2s,background .2s}
+.world-controls button:hover{transform:translateY(-2px)}
+.world-controls button[aria-pressed="true"]{background:#573e6e;color:white;border-color:#573e6e}
+@keyframes world-rise{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+@keyframes world-spark{from{opacity:0;transform:scale(.4) rotate(-30deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@media(max-width:710px){
+ .little-world{padding:34px 4% 20px}.world-intro{margin-bottom:23px}.world-intro h1{font-size:clamp(48px,11vw,68px)}.world-intro p{max-width:290px;margin-top:13px}
+ .world-art{height:clamp(275px,76vw,400px);border-radius:18px}.world-controls{gap:5px}.world-controls button{padding:9px 10px}.world-piece{left:10px;bottom:10px}
+ body:not(.little) .piece-image{background:transparent}
+}
+@media(prefers-reduced-motion:reduce){.world-art>img,.world-orbit{transform:none;transition:none}.world-orbit span{animation:none}}

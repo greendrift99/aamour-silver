@@ -61,3 +61,78 @@ if ('IntersectionObserver' in window && !window.matchMedia('(prefers-reduced-mot
     observer.observe(element);
   });
 }
+
+const world = document.querySelector('.world-scene');
+if (world) {
+  const scenes = {
+    star: {name:'Little Star Bracelet', file:'storybook', alt:'Gold star bracelet in a miniature meadow'},
+    stud: {name:'Little Sun Studs', file:'pack-stud', alt:'Two gold sunburst stud earrings'},
+    anklet: {name:'Starlight Anklet', file:'pack-anklet', alt:'A gold anklet with star and moon charms'}
+  };
+  const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const finePointer = window.matchMedia('(pointer: fine)');
+  const art = document.getElementById('world-art');
+  const image = document.getElementById('world-image');
+  const controls = [...world.querySelectorAll('[data-world-piece]')];
+  let transition;
+  let frame;
+  let pointerX = 0;
+  let pointerY = 0;
+  let visible = true;
+
+  function positionLayers() {
+    frame = undefined;
+    if (!visible || motionPreference.matches) return;
+    const bounds = art.getBoundingClientRect();
+    const progress = Math.max(-1,Math.min(1,(innerHeight / 2 - bounds.top - bounds.height / 2) / innerHeight));
+    art.style.setProperty('--world-x', pointerX * 11 + 'px');
+    art.style.setProperty('--world-y', pointerY * 8 + progress * 15 + 'px');
+  }
+  function scheduleLayers() {
+    if (frame === undefined && !motionPreference.matches && visible) frame = requestAnimationFrame(positionLayers);
+  }
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting;
+      if (visible) scheduleLayers();
+    }).observe(art);
+  }
+  window.addEventListener('scroll',scheduleLayers,{passive:true});
+  window.addEventListener('resize',scheduleLayers);
+  art.addEventListener('pointermove',event => {
+    if (!finePointer.matches || motionPreference.matches) return;
+    const rect = art.getBoundingClientRect();
+    pointerX = (event.clientX - rect.left) / rect.width - .5;
+    pointerY = (event.clientY - rect.top) / rect.height - .5;
+    scheduleLayers();
+  });
+  art.addEventListener('pointerleave',() => {
+    pointerX = pointerY = 0;
+    scheduleLayers();
+  });
+  controls.forEach(button => button.addEventListener('click',() => {
+    const id = button.dataset.worldPiece;
+    if (id===world.dataset.world) return;
+    const {name,file,alt} = scenes[id];
+    world.dataset.world = id;
+    image.src = 'assets/'+file+'.webp';
+    image.alt = alt;
+    document.getElementById('world-piece').href = 'piece.html?id='+id+'&from=kids';
+    document.getElementById('world-name').textContent = name;
+    document.getElementById('world-status').textContent = name;
+    controls.forEach(control => control.setAttribute('aria-pressed',control===button));
+    transition?.cancel();
+    if (!motionPreference.matches && image.animate) transition = image.animate(
+      [{opacity:.25,scale:1.09,clipPath:'inset(0 0 18% 0 round 24px)'},{opacity:1,scale:1,clipPath:'inset(0 0 0 0 round 24px)'}],
+      {duration:560,easing:'cubic-bezier(.18,.72,.23,1)'}
+    );
+  }));
+  world.addEventListener('keydown',event => {
+    if (!['ArrowLeft','ArrowRight'].includes(event.key) || !controls.includes(event.target)) return;
+    event.preventDefault();
+    const index = controls.indexOf(event.target);
+    const next = controls[(index + controls.length + (event.key==='ArrowRight' ? 1 : -1)) % controls.length];
+    next.focus();
+    next.click();
+  });
+}
