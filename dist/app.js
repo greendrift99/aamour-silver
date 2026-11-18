@@ -1,4 +1,4 @@
-const catalog = [
+const originalCatalog = [
   {id:'hoops',name:'Sculpture Hoops',groups:['Her','Rarefind'],category:'Earrings',metal:'Gold',weight:2.8,craft:9800,image:'hoops',story:'Sculptural ridges catch the light with every turn.'},
   {id:'signet',name:'Contour Signet',groups:['Him'],category:'Rings',metal:'Silver',weight:10,craft:4100,image:'him',story:'A clean, softly rounded silhouette in polished silver.'},
   {id:'star',name:'Little Star Bracelet',groups:['Kids'],category:'Bracelets',metal:'Gold',weight:1.4,craft:5600,image:'kids',story:'A small star to mark a big moment.'},
@@ -8,6 +8,7 @@ const catalog = [
   {id:'chain',name:'Silver Horizon Chain',groups:['Him'],category:'Necklaces',metal:'Silver',weight:19,craft:6600,image:'chain',story:'A silver chain with flat links and a quiet gleam.'},
   {id:'stud',name:'Little Sun Studs',groups:['Kids','Her'],category:'Earrings',metal:'Gold',weight:1.1,craft:4300,image:'stud',story:'Tiny gold sunbursts with softly rounded edges.'}
 ];
+let catalog = originalCatalog;
 const groups = ['All','Her','Him','Kids','Rarefind','KAI'];
 const defaultRates = {Gold:8900,Silver:106};
 const $ = (id) => document.getElementById(id);
@@ -29,7 +30,7 @@ let photo;
 let installPrompt;
 let toastTimer;
 const money = new Intl.NumberFormat('en-IN',{style:'currency',currency:'INR',maximumFractionDigits:0});
-const price = (p) => Math.round(p.craft + p.weight * rates[p.metal]);
+const price = (p) => p.fixedPrice ?? Math.round(p.craft + p.weight * rates[p.metal]);
 const total = () => catalog.reduce((sum,p) => sum + (bag[p.id] || 0)*price(p),0);
 const find = (id) => catalog.find((p) => p.id === id);
 const action = (label, type, id = '', style = 'dark') => '<button class="button '+style+'" data-action="'+type+'" data-id="'+id+'">'+label+'</button>';
@@ -41,7 +42,8 @@ function notify(value) {
 }
 const featuredIds = ['dew','hoops','star','landscape'];
 const pieceLink = (p) => 'piece.html?id='+p.id+((kidsStore || kidsPiece) && p.groups.includes('Kids') ? '&from=kids' : '');
-const packshot = (p) => '<img src="assets/pack-'+p.id+'.webp" alt="'+p.name+'" loading="lazy">';
+const imageFor = p => p.imageUrl || 'assets/pack-'+p.id+'.webp';
+const packshot = (p) => '<img src="'+imageFor(p)+'" alt="'+p.name+'" loading="lazy">';
 const glyphs = {
   eye:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.6-6 10-6 10 6 10 6-3.6 6-10 6S2 12 2 12Z"/><circle cx="12" cy="12" r="2.5"/></svg>',
   bag:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 8h14l1 13H4L5 8Zm4 2V6a3 3 0 0 1 6 0v4"/></svg>'
@@ -64,15 +66,15 @@ function card(p, lifestyle = false) {
     '<button class="round-control quick-bag" data-action="add" data-id="'+p.id+'" aria-label="Add '+p.name+' to bag">'+glyphs.bag+'</button></div><h3><a href="'+pieceLink(p)+'">'+p.name+'</a></h3><p>'+money.format(price(p))+'</p></article>';
 }
 function render() {
-  const bagCount = Object.values(bag).reduce((sum,n) => sum+n,0);
+  const bagCount = catalog.reduce((sum,p) => sum+(bag[p.id]||0),0);
   $('count').textContent = bagCount;
   $('mobile-count').textContent = bagCount;
   $('mobile-count').parentElement.setAttribute('aria-label','Open your bag, '+bagCount+' items');
-  if ($('featured-products')) $('featured-products').innerHTML = featuredIds.map(id => card(find(id), id==='star')).join('');
+  if ($('featured-products')) $('featured-products').innerHTML = featuredIds.map(id => find(id)).filter(Boolean).map(p => card(p, p.id==='star')).join('');
   if (!$('products')) return;
   $('groups').innerHTML = groups.map((g) => (g==='Kids' ? '<a class="pill" href="kids.html">Kids</a>' : '<button class="pill" data-group="'+g+'" aria-pressed="'+(group===g)+'">'+g+'</button>')).join('');
   $('shop-title').textContent = ({All:'Shop jewellery',Her:'Jewellery for her',Him:'Jewellery for him',Kids:'Shop Little Aamour',Rarefind:'The Rarefind collection',KAI:'Las Vegas KAI'})[group];
-  const maximum = Math.ceil(Math.max(...catalog.map(price))/1000)*1000;
+  const maximum = Math.ceil(Math.max(1000,...catalog.map(price))/1000)*1000;
   const range = $('max-price');
   if (range && Number(range.max)!==maximum) {
     const atMaximum = !range.max || range.value===range.max;
@@ -83,7 +85,7 @@ function render() {
   if (range) $('price-limit').textContent = money.format(limit);
   const category = $('category').value;
   const metal = $('metal').value;
-  const filtered = catalog.filter(p => (group==='All'||p.groups.includes(group)) && (category==='All'||p.category===category) && (metal==='All'||p.metal===metal) && price(p)<=limit);
+  const filtered = catalog.filter(p => (group==='All'||p.groups.includes(group)) && (category==='All'||(p.rawCategory??p.category)===category) && (metal==='All'||p.metal===metal) && price(p)<=limit);
   const sorting = {low:(a,b)=>price(a)-price(b),high:(a,b)=>price(b)-price(a),name:(a,b)=>a.name.localeCompare(b.name)};
   const compare = sorting[$('sort')?.value];
   if (compare) filtered.sort(compare);
@@ -100,7 +102,7 @@ function renderPiece() {
     return;
   }
   document.title = p.name+' — Aamour';
-  $('piece').innerHTML = '<a class="under piece-back" href="'+back+'">← Back to jewellery</a><div class="piece-layout"><div class="piece-image"><img src="assets/pack-'+p.id+'.webp" alt="'+p.name+'"><button class="round-control" data-action="zoom" data-id="'+p.id+'" aria-label="Enlarge product photograph">⤢</button></div><div class="piece-info"><div class="eyebrow"><span class="metal-dot" data-metal="'+p.metal+'"></span>'+p.category+' · '+p.metal+'</div><div class="piece-title"><h1>'+p.name+'</h1><button class="round-control piece-save" data-action="save" data-id="'+p.id+'" aria-label="Save '+p.name+'" aria-pressed="'+saved.has(p.id)+'">'+(saved.has(p.id)?'♥':'♡')+'</button></div><p class="piece-price">'+money.format(price(p))+'</p><p>'+p.story+'</p><label class="qty-label" for="piece-quantity">Quantity</label><div class="quantity"><button data-step="-1" aria-label="Decrease quantity">−</button><input id="piece-quantity" type="number" min="1" max="99" value="1"><button data-step="1" aria-label="Increase quantity">+</button></div><div class="piece-actions">'+action('Add to bag','add',p.id)+action('Preview on you','try',p.id,'light')+'</div><details open><summary>Piece details</summary><p>'+p.metal+' · '+p.weight+' g sample metal weight</p></details></div></div>';
+  $('piece').innerHTML = '<a class="under piece-back" href="'+back+'">← Back to jewellery</a><div class="piece-layout"><div class="piece-image"><img src="'+imageFor(p)+'" alt="'+p.name+'"><button class="round-control" data-action="zoom" data-id="'+p.id+'" aria-label="Enlarge product photograph">⤢</button></div><div class="piece-info"><div class="eyebrow"><span class="metal-dot" data-metal="'+p.metal+'"></span>'+p.category+' · '+p.metal+'</div><div class="piece-title"><h1>'+p.name+'</h1><button class="round-control piece-save" data-action="save" data-id="'+p.id+'" aria-label="Save '+p.name+'" aria-pressed="'+saved.has(p.id)+'">'+(saved.has(p.id)?'♥':'♡')+'</button></div><p class="piece-price">'+money.format(price(p))+'</p><p>'+p.story+'</p><label class="qty-label" for="piece-quantity">Quantity</label><div class="quantity"><button data-step="-1" aria-label="Decrease quantity">−</button><input id="piece-quantity" type="number" min="1" max="99" value="1"><button data-step="1" aria-label="Increase quantity">+</button></div><div class="piece-actions">'+action('Add to bag','add',p.id)+action('Preview on you','try',p.id,'light')+'</div><details open><summary>Piece details</summary><p>'+p.metal+' · '+p.weight+' g sample metal weight</p></details></div></div>';
 }
 function readQuantity() {
   return Math.min(99, Math.max(1, Math.trunc(Number($('piece-quantity')?.value)) || 1));
@@ -147,7 +149,7 @@ const icons = {
   Anklets:'<ellipse cx="45" cy="35" rx="37" ry="17" fill="none" stroke-width="3"/><circle cx="45" cy="54" r="5" fill="currentColor"/>'
 };
 function tryOn(p) {
-  display(heading('Preview on you')+'<p>Use your camera or a photo. Tap to place the illustration and adjust its size. Images stay in this browser session.</p><div class="stage" id="stage"><video id="camera" autoplay muted playsinline hidden></video><img id="photo-preview" alt="Your try-on photo" hidden><svg class="jewel" id="overlay" viewBox="0 0 90 70" aria-hidden="true" style="color:'+(p.metal==='Silver'?'#d3d1cc':'#d6a248')+'"><g stroke="currentColor">'+icons[p.category]+'</g></svg></div><label>Size<input id="overlay-size" type="range" min="22" max="220" value="78"></label><button class="button dark" id="start-camera">Use camera</button><label>Use a photo<input id="upload-photo" type="file" accept="image/*"></label>');
+  display(heading('Preview on you')+'<p>Use your camera or a photo. Tap to place the illustration and adjust its size. Images stay in this browser session.</p><div class="stage" id="stage"><video id="camera" autoplay muted playsinline hidden></video><img id="photo-preview" alt="Your try-on photo" hidden><svg class="jewel" id="overlay" viewBox="0 0 90 70" aria-hidden="true" style="color:'+(p.metal==='Silver'?'#d3d1cc':'#d6a248')+'"><g stroke="currentColor">'+(icons[p.category]||icons.Rings)+'</g></svg></div><label>Size<input id="overlay-size" type="range" min="22" max="220" value="78"></label><button class="button dark" id="start-camera">Use camera</button><label>Use a photo<input id="upload-photo" type="file" accept="image/*"></label>');
   const stage = $('stage');
   stage.onclick = (event) => {
     const bounds = stage.getBoundingClientRect();
@@ -312,3 +314,84 @@ $('install').onclick = async () => {
 };
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 render();
+
+const escapeMarkup = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function assetUrl(value) {
+  const path = String(value || '');
+  if (/^\/media\/[a-f0-9-]{36}$/.test(path)) return '/api/cms-media/'+path.split('/').at(-1);
+  try { const url=new URL(path); return url.protocol==='https:'?url.href:''; } catch { return ''; }
+}
+function makeCatalog(release) {
+  const categoryNames=new Map(release.categories.map(c=>[c.slug,c.name]));
+  return release.products.flatMap(item => {
+    const id=item.storefrontId || item.id;
+    if(!/^[a-z0-9-]+$/.test(id) || !Number.isFinite(item.price) || item.price<0) return [];
+    const previous=originalCatalog.find(p=>p.id===id);
+    const categories=String(item.collections||'').split(',').map(x=>x.trim()).filter(x=>groups.includes(x)&&x!=='All');
+    const rawCategory=categoryNames.get(String(item.category).toLowerCase().replace(/[^a-z0-9]+/g,'-'))||item.category;
+    return [{id,name:escapeMarkup(item.name),groups:categories.length?categories:(previous?.groups||[]),
+      category:escapeMarkup(rawCategory),rawCategory,metal:item.material==='Silver'?'Silver':item.material==='Gold'?'Gold':previous?.metal||'Unspecified',
+      weight:previous?.weight||0,story:escapeMarkup(item.description),fixedPrice:item.price,
+      imageUrl:escapeMarkup(assetUrl(item.image)) || (previous?'assets/pack-'+id+'.webp':'assets/lotus.png')}];
+  });
+}
+function setStorefrontCopy(release) {
+  for (const entry of release.content) {
+    const slot=[...document.querySelectorAll('[data-cms-copy]')].find(el=>el.dataset.cmsCopy===entry.slug);
+    if(slot)slot.textContent=entry.body;
+  }
+  const notices=$('cms-notices');
+  if(!notices)return;
+  const rows=[...release.announcements,...release.promotions];
+  for(const entry of rows){
+    const item=document.createElement('p');
+    const title=document.createElement('strong');title.textContent=entry.title;
+    item.append(title,document.createTextNode(' '+entry.body+(entry.code?' · Code '+entry.code:'')));
+    if(entry.discountType) {
+      const discount=entry.discountType==='Percentage'?entry.amount+'%':money.format(entry.amount);
+      item.append(document.createTextNode(' · '+discount+' off'));
+    }
+    const href=assetUrl(entry.link);
+    if(href){const link=document.createElement('a');link.href=href;link.textContent=' Learn more';item.append(link);}
+    notices.append(item);
+  }
+  notices.hidden=!rows.length;
+}
+async function updateFromCms() {
+  try {
+    const response=await fetch('/api/catalog',{signal:AbortSignal.timeout(6000)});
+    if(!response.ok)return;
+    const release=await response.json();
+    if(release.currency!=='INR'||!Array.isArray(release.products))return;
+    catalog=makeCatalog(release);
+    const category=$('category');
+    if(category){
+      const values=[...new Set([...release.categories.map(c=>c.name),...catalog.map(p=>p.rawCategory)])].filter(Boolean);
+      const selected=category.value;
+      category.replaceChildren(new Option('All','All'),...values.map(value=>new Option(value,value)));
+      category.value=values.includes(selected)?selected:'All';
+      if($('kid-filters')) {
+        $('kid-filters').replaceChildren(...['All',...new Set(catalog.filter(p=>p.groups.includes('Kids')).map(p=>p.rawCategory))].map(value=>{
+          const button=document.createElement('button');button.className='pill';button.dataset.kid=value;
+          button.textContent=value==='All'?'All pieces':value;button.setAttribute('aria-pressed',String(category.value===value));
+          return button;
+        }));
+      }
+      if($('category-rail')){
+        const current=[...$('category-rail').querySelectorAll('[data-category]')];
+        const kids=$('category-rail').lastElementChild;
+        $('category-rail').replaceChildren(...values.map(value=>{
+          const existing=current.find(node=>node.dataset.category===value);
+          if(existing)return existing;
+          const link=document.createElement('a');link.href='#shop';link.dataset.category=value;link.textContent=value;return link;
+        }),kids);
+      }
+    }
+    document.querySelectorAll('[data-panel="rates"]').forEach(button=>button.hidden=true);
+    setStorefrontCopy(release);
+    render();renderPiece();
+  } catch (error) {
+    console.warn('Using storefront catalog fallback',error.message);
+  }
+}
+updateFromCms();

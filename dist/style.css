@@ -350,3 +350,4 @@ body:not(.little) .gallery-tools button,body:not(.little) .product-photo{transit
  .little .little-card-view{width:34px;height:34px;flex-basis:34px}
 }
 @media(max-width:345px){.little .shop .products{grid-template-columns:1fr}}
+#cms-notices{padding:.75rem 1rem;text-align:center;background:#f6efe5}#cms-notices p{margin:.25rem 0}#cms-notices a{text-decoration:underline}
