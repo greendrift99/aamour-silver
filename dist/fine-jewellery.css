@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700;900&display=swap');
+
+.fine-jewellery:not(.little){
+  --paper:#fff;--ink:#222;--line:#eae7e2;--muted:#555;
+  --gold:#c29958;--gold-ink:#785725;--cream:#f6f2ec;
+  font-family:Lato,"DM Sans",sans-serif;
+}
+.fine-jewellery:not(.little) header{background:#fffffff5}
+.fine-jewellery:not(.little) .announcement{background:#f7f5f2;color:#333;border-bottom:1px solid var(--line)}
+.fine-jewellery:not(.little) .announcement span{color:var(--gold-ink)}
+.fine-jewellery:not(.little) header nav a::after{background:var(--gold)}
+.fine-jewellery:not(.little) :is(.eyebrow,.opening-copy .eyebrow,.under){color:var(--gold-ink)}
+.fine-jewellery:not(.little) .kai .eyebrow{color:#e9cca0}
+.fine-jewellery:not(.little) .opening{
+  display:grid;grid-template-columns:minmax(260px,.74fr) minmax(0,1.26fr);
+  align-items:center;gap:clamp(22px,4vw,72px);padding:clamp(30px,5vw,78px) max(5%,calc((100vw - 1440px)/2));
+  background:linear-gradient(108deg,#fbf9f5,#f1ebe2);
+}
+.fine-jewellery:not(.little) .opening-copy{width:100%;text-align:left;margin:0}
+.fine-jewellery:not(.little) .opening h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6vw,96px);line-height:.99;letter-spacing:-.055em}
+.fine-jewellery:not(.little) .opening h1 em{color:var(--gold-ink)}
+.fine-jewellery:not(.little) .opening-copy>p:not(.eyebrow){max-width:39ch;margin:19px 0;color:var(--muted)}
+.fine-jewellery:not(.little) .gallery{width:100%;margin:0}
+.fine-jewellery:not(.little) .gallery-frame{border-radius:9px;padding:5px;height:clamp(290px,43vw,560px);border-color:#fff;box-shadow:0 15px 42px #46321920}
+.fine-jewellery:not(.little) .gallery-frame>img{border-radius:5px}
+.fine-jewellery:not(.little) .gallery-caption{background:#ffffffed}
+.fine-jewellery:not(.little) #campaign-pages button[aria-pressed=true]::before{background:var(--gold-ink)}
+.fine-jewellery:not(.little) :is(.featured,.category-section,.shop) h2{
+  font-family:var(--serif);font-weight:400;letter-spacing:-.04em
+}
+.fine-jewellery:not(.little) .category-section{text-align:center;background:#faf8f5;border-top:1px solid var(--line);border-bottom:1px solid var(--line);max-width:none}
+.fine-jewellery:not(.little) .category-rail img{outline-color:#d6bd93}
+.fine-jewellery:not(.little) :is(.filter-box,.piece-info details){background:#f8f5f0}
+.fine-jewellery:not(.little) :is(.product-visual,.piece-image){background:var(--cream);border-radius:8px}
+.fine-jewellery:not(.little) :is(.product h3,.product p,.catalog-toolbar){font-family:Lato,"DM Sans",sans-serif}
+.fine-jewellery:not(.little) :is(.product-photo,.product-visual img){border-radius:inherit}
+.fine-jewellery:not(.little) .product p,.fine-jewellery:not(.little) .piece-price{color:var(--gold-ink);font-weight:700}
+.fine-jewellery:not(.little) :is(.dark,.mobile-bag,.pill[aria-pressed=true],#density button[aria-pressed=true],.round-control:hover){background:#25211e;color:#fffaf2}
+.fine-jewellery:not(.little) .button.dark{border-radius:5px;border:1px solid #25211e}
+.fine-jewellery:not(.little) .button.dark:hover{background:#6b4c23;border-color:#6b4c23}
+.fine-jewellery:not(.little) .under{border-color:var(--gold)}
+.fine-jewellery:not(.little) .piece-info h1{font-family:var(--serif);font-weight:500;letter-spacing:-.045em}
+.fine-jewellery:not(.little) footer{background:#f6f3ef}
+@media(max-width:710px){
+  .fine-jewellery:not(.little) .opening{grid-template-columns:1fr;gap:23px;padding:29px 5% 14px}
+  .fine-jewellery:not(.little) .opening h1{font-size:clamp(46px,11vw,68px)}
+  .fine-jewellery:not(.little) .gallery-frame{height:clamp(225px,67vw,365px)}
+  .fine-jewellery:not(.little) .piece-image{background:transparent}
+  .fine-jewellery:not(.little) .shop .product .quick-bag{background:#25211e}
+}
