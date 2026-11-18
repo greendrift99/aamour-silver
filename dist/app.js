@@ -127,13 +127,44 @@ function product(id) {
 function results(items) {
   return items.map((p) => '<div class="row"><button data-action="product" data-id="'+p.id+'">'+p.name+'</button><span>'+money.format(price(p))+'</span></div>').join('') || '<p>No pieces found.</p>';
 }
+const commerceView = new URLSearchParams(location.search).get('view') || 'cart';
+const shoppingLinks = '<a class="under" href="index.html#shop">Continue shopping ↗</a>';
+function availableQuantity(p) {
+  return p.stock === undefined ? 99 : Math.max(0,Math.min(99,p.stock));
+}
+function renderCommerce() {
+  const page = $('commerce');
+  if (!page) return;
+  const title = {account:'My account',checkout:'Checkout',cart:'Shopping bag'}[commerceView] || 'Shopping bag';
+  document.title = title+' — Aamour';
+  const intro = '<nav class="commerce-path" aria-label="Breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span>'+title+'</nav><h1>'+title+'</h1>';
+  if (commerceView==='account') {
+    page.innerHTML = intro+'<div class="commerce-grid"><section class="commerce-box"><h2>Sign in</h2><p>Customer sign-in is pending setup. You can browse the store and keep a bag on this device.</p>'+shoppingLinks+'</section><section class="commerce-box"><h2>Saved on this device</h2>'+results(catalog.filter(p => saved.has(p.id)))+'</section></div>';
+    return;
+  }
+  const items = catalog.filter(p => bag[p.id]>0);
+  const unavailable = Object.keys(bag).some(id => !find(id));
+  const overStock = items.some(p => bag[p.id]>availableQuantity(p));
+  const warnings = (unavailable ? '<p class="commerce-alert">Some pieces are no longer listed. <button class="under" data-action="clear-unavailable">Remove unavailable pieces</button></p>' : '') + (overStock ? '<p class="commerce-alert">Adjust quantities in your shopping bag to match available stock.</p>' : '');
+  const cartLink = '<a class="under" href="commerce.html">← Back to bag</a>';
+  if (!items.length) {
+    page.innerHTML = intro+warnings+'<div class="commerce-box"><p>Your bag is empty.</p>'+shoppingLinks+'</div>';
+    return;
+  }
+  const summary = '<aside class="commerce-box commerce-total"><h2>Order summary</h2>'+items.map(p => '<p class="row"><span>'+p.name+' × '+bag[p.id]+'</span><strong>'+money.format(price(p)*bag[p.id])+'</strong></p>').join('')+'<p class="row"><strong>Subtotal</strong><strong>'+money.format(total())+'</strong></p><p>Shipping and taxes will be confirmed when ordering opens.</p>'+(!unavailable && !overStock && commerceView!=='checkout' ? '<a class="button dark" href="commerce.html?view=checkout">Proceed to checkout ↗</a>' : '')+'</aside>';
+  if (commerceView==='checkout') {
+    page.innerHTML = intro+warnings+'<div class="commerce-grid"><section class="commerce-box"><h2>Delivery</h2><p>Shipping options will appear here when online ordering opens.</p><h2>Payment</h2><p class="commerce-alert">Online payments are pending setup. No order or payment can be submitted yet.</p>'+cartLink+'</section>'+summary+'</div>';
+    return;
+  }
+  page.innerHTML = intro+warnings+'<div class="commerce-grid"><section aria-label="Items in your bag" class="commerce-box cart-items">'+items.map(p => '<article class="cart-item"><a href="'+pieceLink(p)+'">'+packshot(p)+'</a><div><h2><a href="'+pieceLink(p)+'">'+p.name+'</a></h2><p>'+money.format(price(p))+' each</p>'+(bag[p.id]>availableQuantity(p)?'<p class="commerce-alert">Available quantity: '+availableQuantity(p)+'</p>':'')+'<div class="quantity"><button data-action="minus" data-id="'+p.id+'" aria-label="Decrease '+p.name+'">−</button><span aria-label="Quantity">'+bag[p.id]+'</span><button data-action="plus" data-id="'+p.id+'" aria-label="Increase '+p.name+'" '+(bag[p.id]>=availableQuantity(p)?'disabled':'')+'>+</button></div><button class="under cart-remove" data-action="remove" data-id="'+p.id+'">Remove</button></div><strong>'+money.format(price(p)*bag[p.id])+'</strong></article>').join('')+shoppingLinks+'</section>'+summary+'</div>';
+}
 function show(type) {
   const views = {
     search: () => { display(heading('Find jewellery')+'<label>Search the collection<input id="query" type="search" placeholder="Try silver or pendant"></label><div id="matches">'+results(kidsStore ? catalog.filter((p) => p.groups.includes('Kids')) : catalog)+'</div>'); $('query').focus(); },
     saved: () => display(heading('Your saved pieces')+(saved.size ? results(catalog.filter((p) => saved.has(p.id))) : '<p>Tap a heart to save a piece.</p>')),
     bag: () => {
       const lines = catalog.filter((p) => bag[p.id]).map((p) => '<div class="row"><div>'+p.name+'<br><small>'+money.format(price(p))+' each</small></div><div><button data-action="minus" data-id="'+p.id+'" aria-label="Decrease '+p.name+'">−</button> '+bag[p.id]+' <button data-action="plus" data-id="'+p.id+'" aria-label="Increase '+p.name+'">+</button></div></div>').join('');
-      display(heading('Your bag')+(lines ? lines+'<p><strong>Subtotal '+money.format(total())+'</strong></p>'+action('Preview checkout','checkout') : '<p>Your bag is empty.</p>'));
+      display(heading('Your bag')+(lines ? lines+'<p><strong>Subtotal '+money.format(total())+'</strong></p>'+'<div class="mini-bag-actions"><a class="button light" href="commerce.html">View shopping bag</a><a class="button dark" href="commerce.html?view=checkout">Checkout</a></div>' : '<p>Your bag is empty.</p>'));
     },
     rates: () => display(heading('Metal rates')+'<p>Change the sample rates in ₹ per gram to see how prices recalculate for the catalogue and bag.</p><form id="rate-form"><label>Gold (₹/g)<input name="Gold" type="number" min="1" max="1000000" step="0.01" required value="'+rates.Gold+'"></label><label>Silver (₹/g)<input name="Silver" type="number" min="1" max="1000000" step="0.01" required value="'+rates.Silver+'"></label><button class="button dark">Update demo rates</button></form>'),
     bespoke: () => display(heading('Your bespoke brief')+'<p>Sketch out what you’d like to make with our karigars. Save a copy on this device.</p><form id="brief-form"><label>Piece or occasion<input name="occasion" required maxlength="120"></label><label>Design notes<textarea name="brief" required maxlength="2000"></textarea></label><button class="button dark">Save brief on this device</button></form>'),
@@ -216,13 +247,29 @@ document.addEventListener('click', (event) => {
     document.querySelector('[data-action="save"][data-id="'+id+'"]')?.focus();
     notify(saved.has(id)?'Piece saved':'Piece removed from saved');
   }
-  if (['add','minus','plus'].includes(type)) {
+  if (type==='clear-unavailable') {
+    for (const key of Object.keys(bag)) if (!find(key)) delete bag[key];
+    save('bag',bag);
+    render();
+    renderCommerce();
+  }
+  if (['add','minus','plus','remove'].includes(type)) {
+    const item = find(id);
+    if (!item) return;
     const isDetail = Boolean(control.closest('.piece-actions'));
-    bag[id] = (bag[id] || 0) + (type==='minus' ? -1 : isDetail ? readQuantity() : 1);
+    const current = bag[id] || 0;
+    const change = type==='minus' ? -1 : isDetail ? readQuantity() : 1;
+    const next = type==='remove' ? 0 : current + change;
+    if (next>current && next>availableQuantity(item)) {
+      notify(availableQuantity(item) ? 'That quantity is unavailable' : 'This piece is currently out of stock');
+      return;
+    }
+    bag[id] = next;
     if (bag[id]<1) delete bag[id];
     save('bag',bag);
     render();
-    if (type!=='add') show('bag');
+    if ($('commerce')) renderCommerce();
+    else if (type!=='add') show('bag');
     else if (control.closest('.product')) {
       document.querySelector('.quick-bag[data-id="'+id+'"]')?.focus();
       notify('Added to your bag');
@@ -315,6 +362,7 @@ $('install').onclick = async () => {
 };
 if ('serviceWorker' in navigator) navigator.serviceWorker.register('./sw.js').catch(() => {});
 render();
+renderCommerce();
 
 const escapeMarkup = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function assetUrl(value) {
@@ -332,7 +380,7 @@ function makeCatalog(release) {
     const rawCategory=categoryNames.get(String(item.category).toLowerCase().replace(/[^a-z0-9]+/g,'-'))||item.category;
     return [{id,name:escapeMarkup(item.name),groups:categories.length?categories:(previous?.groups||[]),
       category:escapeMarkup(rawCategory),rawCategory,metal:item.material==='Silver'?'Silver':item.material==='Gold'?'Gold':previous?.metal||'Unspecified',
-      weight:previous?.weight||0,story:escapeMarkup(item.description),fixedPrice:item.price,
+      weight:previous?.weight||0,story:escapeMarkup(item.description),fixedPrice:item.price,stock:Number.isInteger(item.stock)?Math.max(0,item.stock):undefined,
       imageUrl:escapeMarkup(assetUrl(item.image)) || (previous?'assets/pack-'+id+'.webp':'assets/lotus.png')}];
   });
 }
@@ -390,7 +438,7 @@ async function updateFromCms() {
     }
     document.querySelectorAll('[data-panel="rates"]').forEach(button=>button.hidden=true);
     setStorefrontCopy(release);
-    render();renderPiece();
+    render();renderPiece();renderCommerce();
   } catch (error) {
     console.warn('Using storefront catalog fallback',error.message);
   }

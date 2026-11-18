@@ -48,3 +48,23 @@
   .fine-jewellery:not(.little) .piece-image{background:transparent}
   .fine-jewellery:not(.little) .shop .product .quick-bag{background:#25211e}
 }
+
+.fine-jewellery:not(.little) .account-link{display:grid;place-items:center;width:29px;height:36px}
+.commerce{min-height:58vh}
+.commerce-path{display:flex;align-items:center;gap:10px;margin-bottom:18px;color:var(--muted);font-size:13px}
+.commerce h1{font-size:clamp(40px,6vw,72px);letter-spacing:-.055em;margin:0 0 27px}
+.commerce h2{font-size:clamp(22px,2.8vw,32px);letter-spacing:-.025em}
+.commerce-grid{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(270px,.9fr);align-items:start;gap:24px}
+.commerce-box{border:1px solid var(--line);border-radius:8px;padding:clamp(15px,2.5vw,26px);background:#fff}
+.commerce-total{background:#f9f6f1}
+.commerce-total .button{margin-top:8px}
+.cart-item{display:grid;grid-template-columns:95px minmax(0,1fr) auto;align-items:start;gap:15px;padding:16px 0;border-bottom:1px solid var(--line);margin-bottom:12px}
+.cart-item img{aspect-ratio:1;object-fit:contain;border-radius:5px;background:#faf7f1}
+.cart-item h2{font-size:clamp(16px,2vw,23px)}
+.cart-item p{margin:4px 0 9px}
+.cart-item .quantity{gap:5px}
+.cart-item .quantity button:disabled{opacity:.42;cursor:default}
+.cart-remove{display:block;margin-top:9px}
+.commerce-alert{color:#6f471c;background:#faf0df;border-radius:5px;padding:8px 10px}
+.mini-bag-actions{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:710px){.commerce-grid{grid-template-columns:1fr}.cart-item{grid-template-columns:65px minmax(0,1fr) auto;gap:9px}.cart-item>strong{font-size:13px}}
