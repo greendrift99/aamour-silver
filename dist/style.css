@@ -380,3 +380,4 @@ body:not(.little) .gallery-tools button,body:not(.little) .product-photo{transit
 .world-start{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:10px 18px;margin:18px auto 0}
 .cloudtown{height:clamp(155px,25vw,330px);max-width:1440px;margin:-12px auto 24px;background:url('assets/cloudtown.webp') center bottom/cover no-repeat;mask-image:linear-gradient(transparent 1%,#000 34%,#000 89%,transparent);pointer-events:none}
 @media(max-width:710px){.cloudtown{margin:0 -4.35% 15px;background-size:auto 260%;height:155px}.world-start .under{font-size:12px}}
+#cms-notices{padding:.75rem 1rem;text-align:center;background:#f6efe5}#cms-notices p{margin:.25rem 0}#cms-notices a{text-decoration:underline}
